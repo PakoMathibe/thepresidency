@@ -1,0 +1,329 @@
+/* ========================================
+   ADMIN — Dashboard & Editor Styles
+   ======================================== */
+
+/* Admin Sections */
+.admin-section {
+  background: var(--bg-surface);
+  border: 1px solid var(--line);
+  border-radius: var(--radius-lg);
+  padding: var(--space-5) var(--space-6);
+  margin-bottom: var(--space-5);
+}
+.admin-section-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: var(--space-4);
+  flex-wrap: wrap;
+  gap: var(--space-3);
+}
+.admin-section-header h3 {
+  font-size: 1.05rem;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+}
+.admin-section-header h3 i {
+  color: var(--gold-500);
+}
+
+/* Admin Tables */
+.admin-table-wrapper {
+  overflow-x: auto;
+}
+.admin-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.9rem;
+}
+.admin-table th {
+  text-align: left;
+  padding: var(--space-3) var(--space-4);
+  background: var(--bg-alt);
+  font-weight: 600;
+  color: var(--text-secondary);
+  border-bottom: 2px solid var(--line);
+}
+.admin-table td {
+  padding: var(--space-3) var(--space-4);
+  border-bottom: 1px solid var(--line);
+  vertical-align: middle;
+}
+.admin-table tr:hover td {
+  background: var(--bg-alt);
+}
+.admin-table code {
+  background: var(--bg-alt);
+  padding: var(--space-1) var(--space-2);
+  border-radius: var(--radius-sm);
+  font-size: 0.8rem;
+}
+
+/* Badges */
+.role-badge {
+  padding: var(--space-1) var(--space-3);
+  border-radius: var(--radius-full);
+  font-size: 0.7rem;
+  font-weight: 600;
+  text-transform: capitalize;
+}
+.role-super_admin { background: var(--gold-500); color: var(--bg-dark); }
+.role-editor { background: var(--green-50); color: var(--green-500); }
+.role-reviewer { background: var(--gold-50); color: var(--gold-500); }
+.role-approver { background: var(--blue-500); color: var(--white); }
+
+.status-badge {
+  padding: var(--space-1) var(--space-3);
+  border-radius: var(--radius-full);
+  font-size: 0.7rem;
+  font-weight: 600;
+  text-transform: capitalize;
+}
+.status-active { background: var(--green-50); color: var(--green-500); }
+.status-inactive { background: var(--bg-alt); color: var(--text-muted); }
+.status-draft { background: var(--bg-alt); color: var(--text-muted); }
+.status-review { background: var(--gold-50); color: var(--gold-500); }
+.status-approved { background: var(--green-50); color: var(--green-500); }
+.status-published { background: var(--blue-500); color: var(--white); }
+
+.priority-badge {
+  padding: var(--space-1) var(--space-3);
+  border-radius: var(--radius-full);
+  font-size: 0.7rem;
+  font-weight: 600;
+  text-transform: capitalize;
+}
+.priority-high { background: var(--red-500); color: var(--white); }
+.priority-medium { background: var(--gold-500); color: var(--bg-dark); }
+.priority-low { background: var(--bg-alt); color: var(--text-muted); }
+
+/* Icon Buttons */
+.icon-btn-sm {
+  width: 32px;
+  height: 32px;
+  border: 1px solid var(--line);
+  border-radius: var(--radius-sm);
+  background: var(--bg-surface);
+  color: var(--text-muted);
+  cursor: pointer;
+  transition: all var(--transition-fast) ease;
+  font-size: 0.8rem;
+}
+.icon-btn-sm:hover {
+  border-color: var(--gold-500);
+  color: var(--gold-500);
+  background: var(--gold-50);
+}
+
+/* Modules Grid */
+.modules-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+  gap: var(--space-3);
+}
+.module-card {
+  padding: var(--space-4);
+  border: 1px solid var(--line);
+  border-radius: var(--radius-md);
+  transition: all var(--transition-fast) ease;
+}
+.module-card:hover {
+  border-color: var(--gold-300);
+}
+.module-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.module-name {
+  font-weight: 600;
+}
+.module-info {
+  display: flex;
+  justify-content: space-between;
+  margin-top: var(--space-2);
+  font-size: 0.8rem;
+  color: var(--text-muted);
+}
+.module-status {
+  font-weight: 600;
+}
+.module-status.active { color: var(--green-500); }
+.module-status.inactive { color: var(--text-muted); }
+
+/* Toggle Switch */
+.toggle-switch {
+  position: relative;
+  width: 44px;
+  height: 24px;
+  cursor: pointer;
+}
+.toggle-switch input {
+  opacity: 0;
+  width: 0;
+  height: 0;
+}
+.toggle-slider {
+  position: absolute;
+  inset: 0;
+  background: var(--line);
+  border-radius: var(--radius-full);
+  transition: all var(--transition-fast) ease;
+}
+.toggle-slider::before {
+  content: '';
+  position: absolute;
+  width: 18px;
+  height: 18px;
+  left: 3px;
+  bottom: 3px;
+  background: var(--white);
+  border-radius: 50%;
+  transition: all var(--transition-fast) ease;
+}
+.toggle-switch input:checked + .toggle-slider {
+  background: var(--green-500);
+}
+.toggle-switch input:checked + .toggle-slider::before {
+  transform: translateX(20px);
+}
+
+/* Documents Grid */
+.documents-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: var(--space-3);
+}
+.document-card {
+  display: flex;
+  align-items: center;
+  gap: var(--space-4);
+  padding: var(--space-4);
+  border: 1px solid var(--line);
+  border-radius: var(--radius-md);
+  transition: all var(--transition-fast) ease;
+}
+.document-card:hover {
+  border-color: var(--gold-300);
+}
+.doc-icon {
+  width: 48px;
+  height: 48px;
+  border-radius: var(--radius-sm);
+  display: grid;
+  place-items: center;
+  font-size: 1.5rem;
+  flex-shrink: 0;
+}
+.doc-icon.pdf { background: #fee9e7; color: #de3831; }
+.doc-icon.docx { background: #e8f0fe; color: #1a73e8; }
+.doc-icon.pptx { background: #fef3e7; color: #e37400; }
+.doc-icon.xlsx { background: #e7f4ea; color: #1e8e3e; }
+.doc-icon.image { background: #f3e8ff; color: #9334e6; }
+.doc-icon.video { background: #fce4ec; color: #d81b60; }
+.doc-info { flex: 1; }
+.doc-name { font-weight: 600; font-size: 0.9rem; }
+.doc-meta { font-size: 0.75rem; color: var(--text-muted); }
+.doc-date { font-size: 0.7rem; color: var(--text-muted); }
+.doc-actions { display: flex; gap: var(--space-1); }
+
+/* Backup Stats */
+.backup-stats {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: var(--space-3);
+  margin-bottom: var(--space-4);
+}
+.backup-stat {
+  padding: var(--space-3);
+  background: var(--bg-alt);
+  border-radius: var(--radius-sm);
+  text-align: center;
+}
+.backup-stat .stat-label {
+  display: block;
+  font-size: 0.7rem;
+  color: var(--text-muted);
+}
+.backup-stat .stat-value {
+  display: block;
+  font-weight: 700;
+  font-size: 1.1rem;
+}
+.backup-type {
+  padding: var(--space-1) var(--space-3);
+  border-radius: var(--radius-full);
+  font-size: 0.7rem;
+  font-weight: 600;
+}
+.backup-type.full { background: var(--gold-50); color: var(--gold-500); }
+.backup-type.incremental { background: var(--green-50); color: var(--green-500); }
+
+/* Audit List */
+.audit-list {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+}
+.audit-item {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  padding: var(--space-2) var(--space-3);
+  border-radius: var(--radius-sm);
+  transition: background var(--transition-fast) ease;
+}
+.audit-item:hover {
+  background: var(--bg-alt);
+}
+.audit-icon {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  background: var(--gold-50);
+  color: var(--gold-500);
+  display: grid;
+  place-items: center;
+  flex-shrink: 0;
+}
+.audit-content { flex: 1; }
+.audit-action { font-weight: 600; font-size: 0.9rem; }
+.audit-detail { font-size: 0.82rem; color: var(--text-muted); }
+.audit-time { font-size: 0.72rem; color: var(--text-muted); }
+
+/* Responsive Admin */
+@media (max-width: 1024px) {
+  .backup-stats {
+    grid-template-columns: repeat(2, 1fr);
+  }
+  .documents-grid {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+@media (max-width: 640px) {
+  .admin-section {
+    padding: var(--space-4);
+  }
+  .admin-section-header {
+    flex-direction: column;
+    align-items: stretch;
+  }
+  .backup-stats {
+    grid-template-columns: 1fr;
+  }
+  .documents-grid {
+    grid-template-columns: 1fr;
+  }
+  .modules-grid {
+    grid-template-columns: 1fr;
+  }
+  .admin-table {
+    font-size: 0.8rem;
+  }
+  .admin-table th,
+  .admin-table td {
+    padding: var(--space-2) var(--space-3);
+  }
+}

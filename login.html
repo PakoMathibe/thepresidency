@@ -1,0 +1,265 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#006b4f">
+  <meta name="description" content="Sign in to The Presidency Administration Panel">
+  <title>Sign In | The Presidency Admin</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,400;14..32,500;14..32,600;14..32,700;14..32,800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+  <link rel="stylesheet" href="login.css">
+</head>
+<body class="login-body">
+
+  <div class="login-layout">
+
+    <!-- ======================================== -->
+    <!-- BRAND PANEL (Desktop)                     -->
+    <!-- ======================================== -->
+    <aside class="login-brand-panel">
+      <div class="grid-pattern"></div>
+
+      <div class="login-brand-header">
+        <img src="https://www.thepresidency.gov.za/sites/default/files/code-of-arms/Coat%20of%20Arms_complete.jpg" alt="Coat of Arms">
+        <div class="brand-text">
+          <h2>The Presidency</h2>
+          <span>Republic of South Africa</span>
+        </div>
+      </div>
+
+      <div class="login-brand-content">
+        <h1>Administration Portal</h1>
+        <p>Secure access to content management, publishing workflows, and citizen engagement tools for The Presidency.</p>
+
+        <div class="login-brand-features">
+          <div class="brand-feature">
+            <div class="icon-box"><i class="fas fa-shield-alt"></i></div>
+            <div class="feature-text">
+              <strong>Enterprise Security</strong>
+              <span>SSL, 2FA, and audit trails</span>
+            </div>
+          </div>
+          <div class="brand-feature">
+            <div class="icon-box"><i class="fas fa-code-branch"></i></div>
+            <div class="feature-text">
+              <strong>Content Workflow</strong>
+              <span>Draft → Review → Publish</span>
+            </div>
+          </div>
+          <div class="brand-feature">
+            <div class="icon-box"><i class="fas fa-users-cog"></i></div>
+            <div class="feature-text">
+              <strong>Role Management</strong>
+              <span>Granular permissions</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="login-brand-footer">
+        <div class="status">
+          <span class="status-dot"></span>
+          <span>All systems operational</span>
+        </div>
+        <span>v3.0 · © 2026</span>
+      </div>
+    </aside>
+
+    <!-- ======================================== -->
+    <!-- FORM PANEL (Desktop + Mobile)             -->
+    <!-- ======================================== -->
+    <main class="login-form-panel">
+      <div class="login-form-wrapper">
+
+        <!-- Mobile Header (shows on mobile) -->
+        <div class="login-mobile-header">
+          <img src="https://www.thepresidency.gov.za/sites/default/files/code-of-arms/Coat%20of%20Arms_complete.jpg" alt="Coat of Arms">
+          <div>
+            <h2>The Presidency</h2>
+            <span>Administration Portal</span>
+          </div>
+        </div>
+
+        <!-- Welcome -->
+        <div class="login-welcome">
+          <span class="badge"><i class="fas fa-lock"></i> Secure Sign In</span>
+          <h1>Welcome back</h1>
+          <p>Sign in to access your administration dashboard</p>
+        </div>
+
+        <!-- Login Form -->
+        <form class="login-form" id="loginForm" novalidate>
+
+          <!-- Email -->
+          <div class="form-field">
+            <label for="loginEmail">Email Address</label>
+            <div class="input-wrapper">
+              <input 
+                type="email" 
+                id="loginEmail" 
+                name="email"
+                placeholder="you@presidency.gov.za" 
+                autocomplete="email"
+                required
+                aria-describedby="emailError"
+              >
+              <i class="fas fa-envelope input-icon"></i>
+              <i class="fas fa-check-circle field-success" id="emailSuccess"></i>
+            </div>
+            <div class="field-error" id="emailError" role="alert">
+              <i class="fas fa-exclamation-circle"></i>
+              <span>Email is required</span>
+            </div>
+          </div>
+
+          <!-- Password -->
+          <div class="form-field">
+            <label for="loginPassword">
+              Password
+              <a href="#" class="forgot-link" id="forgotLink">Forgot password?</a>
+            </label>
+            <div class="input-wrapper">
+              <input 
+                type="password" 
+                id="loginPassword" 
+                name="password"
+                placeholder="Enter your password" 
+                autocomplete="current-password"
+                required
+                aria-describedby="passwordError"
+              >
+              <i class="fas fa-lock input-icon"></i>
+              <i class="fas fa-check-circle field-success" id="passwordSuccess"></i>
+              <button 
+                type="button" 
+                class="password-toggle" 
+                id="passwordToggle" 
+                aria-label="Toggle password visibility"
+              >
+                <i class="fas fa-eye"></i>
+              </button>
+            </div>
+            <div class="field-error" id="passwordError" role="alert">
+              <i class="fas fa-exclamation-circle"></i>
+              <span>Password is required</span>
+            </div>
+
+            <!-- Password Strength -->
+            <div class="password-strength" id="passwordStrength">
+              <div class="bars">
+                <div class="bar"></div>
+                <div class="bar"></div>
+                <div class="bar"></div>
+                <div class="bar"></div>
+              </div>
+              <div class="label" id="strengthLabel">Password strength</div>
+            </div>
+          </div>
+
+          <!-- Remember me -->
+          <div class="checkbox-row">
+            <label class="checkbox-label">
+              <input type="checkbox" id="rememberMe" checked>
+              <span class="checkbox-custom">
+                <i class="fas fa-check"></i>
+              </span>
+              Keep me signed in
+            </label>
+          </div>
+
+          <!-- Submit -->
+          <button type="submit" class="btn-submit" id="submitBtn">
+            <span class="btn-spinner"></span>
+            <i class="fas fa-sign-in-alt btn-icon"></i>
+            <span class="btn-text">Sign In to Dashboard</span>
+          </button>
+
+          <!-- Divider -->
+          <div class="login-divider">or continue with</div>
+
+          <!-- SSO -->
+          <div class="sso-buttons">
+            <button type="button" class="sso-btn" onclick="showToast('🔐 Redirecting to SA Gov SSO...', 'info')">
+              <i class="fas fa-landmark"></i>
+              SA Gov SSO
+            </button>
+            <button type="button" class="sso-btn" onclick="showToast('🔐 Redirecting to Microsoft...', 'info')">
+              <i class="fab fa-microsoft"></i>
+              Microsoft
+            </button>
+          </div>
+
+          <!-- Security Footer -->
+          <div class="login-security">
+            <i class="fas fa-lock"></i>
+            <span>Protected by SSL</span>
+            <span class="divider">·</span>
+            <i class="fas fa-shield-alt"></i>
+            <span>2FA Enabled</span>
+            <span class="divider">·</span>
+            <a href="index.html" style="color:inherit;text-decoration:none;">
+              <i class="fas fa-arrow-left"></i>
+              <span>Main site</span>
+            </a>
+          </div>
+
+        </form>
+      </div>
+    </main>
+
+  </div>
+
+  <!-- ======================================== -->
+  <!-- 2FA MODAL                                 -->
+  <!-- ======================================== -->
+  <div class="login-modal" id="twoFAModal" role="dialog" aria-modal="true" aria-labelledby="twoFATitle">
+    <div class="login-modal-content">
+      <button class="login-modal-close" id="close2FA" aria-label="Close">
+        <i class="fas fa-times"></i>
+      </button>
+
+      <div class="modal-icon">
+        <i class="fas fa-shield-alt"></i>
+      </div>
+
+      <h2 id="twoFATitle">Verify Your Identity</h2>
+      <p>We sent a 6-digit code to your registered email. Enter it below to complete sign in.</p>
+
+      <div class="otp-inputs">
+        <input type="text" maxlength="1" inputmode="numeric" pattern="[0-9]" aria-label="Digit 1">
+        <input type="text" maxlength="1" inputmode="numeric" pattern="[0-9]" aria-label="Digit 2">
+        <input type="text" maxlength="1" inputmode="numeric" pattern="[0-9]" aria-label="Digit 3">
+        <input type="text" maxlength="1" inputmode="numeric" pattern="[0-9]" aria-label="Digit 4">
+        <input type="text" maxlength="1" inputmode="numeric" pattern="[0-9]" aria-label="Digit 5">
+        <input type="text" maxlength="1" inputmode="numeric" pattern="[0-9]" aria-label="Digit 6">
+      </div>
+
+      <div class="resend-row">
+        Didn't receive the code? 
+        <a id="resendLink">Resend</a>
+        <span id="resendTimer"></span>
+      </div>
+
+      <button type="button" class="btn-submit" id="verifyBtn" style="width:100%;">
+        <span class="btn-spinner"></span>
+        <i class="fas fa-check btn-icon"></i>
+        <span class="btn-text">Verify & Sign In</span>
+      </button>
+
+      <div class="field-error" id="verifyError" style="justify-content:center;margin-top:12px;">
+        <i class="fas fa-exclamation-circle"></i>
+        <span>Invalid verification code</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Toast -->
+  <div class="login-toast" id="loginToast" role="status" aria-live="polite"></div>
+
+  <script src="login.js"></script>
+
+</body>
+</html>

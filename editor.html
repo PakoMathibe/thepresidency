@@ -1,0 +1,419 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#006b4f">
+  <title>Content Editor | The Presidency</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,400;14..32,500;14..32,600;14..32,700;14..32,800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+  <link rel="stylesheet" href="styles.css">
+  <style>
+    .editor-layout {
+      display: grid;
+      grid-template-columns: 1fr 300px;
+      gap: var(--space-6);
+      padding: var(--space-6) var(--space-7);
+      max-width: 1400px;
+      margin: 0 auto;
+    }
+    .editor-main {
+      background: var(--bg-surface);
+      border: 1px solid var(--line);
+      border-radius: var(--radius-lg);
+      padding: var(--space-6);
+    }
+    .editor-sidebar {
+      display: flex;
+      flex-direction: column;
+      gap: var(--space-4);
+    }
+    .editor-field {
+      margin-bottom: var(--space-4);
+    }
+    .editor-field label {
+      font-weight: 600;
+      font-size: 0.85rem;
+      display: block;
+      margin-bottom: var(--space-1);
+      color: var(--text-secondary);
+    }
+    .editor-field input,
+    .editor-field select,
+    .editor-field textarea {
+      width: 100%;
+      padding: var(--space-3) var(--space-4);
+      border: 2px solid var(--line);
+      border-radius: var(--radius-sm);
+      font-size: 0.95rem;
+      font-family: inherit;
+      background: var(--bg-surface);
+      color: var(--text-primary);
+      transition: all var(--transition-fast) ease;
+    }
+    .editor-field input:focus,
+    .editor-field select:focus,
+    .editor-field textarea:focus {
+      outline: none;
+      border-color: var(--gold-500);
+      box-shadow: 0 0 0 4px rgba(212,161,42,0.1);
+    }
+    .editor-field textarea {
+      min-height: 300px;
+      resize: vertical;
+    }
+    .editor-toolbar {
+      display: flex;
+      gap: var(--space-2);
+      flex-wrap: wrap;
+      padding: var(--space-3) var(--space-4);
+      background: var(--bg-alt);
+      border-radius: var(--radius-sm);
+      margin-bottom: var(--space-4);
+      border: 1px solid var(--line);
+    }
+    .editor-toolbar button {
+      padding: var(--space-1) var(--space-3);
+      border: 1px solid transparent;
+      border-radius: var(--radius-sm);
+      background: transparent;
+      cursor: pointer;
+      font-size: 0.85rem;
+      transition: all var(--transition-fast) ease;
+      font-family: inherit;
+    }
+    .editor-toolbar button:hover {
+      background: var(--bg-surface);
+      border-color: var(--line);
+    }
+    .editor-toolbar .separator {
+      width: 1px;
+      background: var(--line);
+      margin: 0 var(--space-1);
+    }
+    .sidebar-card {
+      background: var(--bg-surface);
+      border: 1px solid var(--line);
+      border-radius: var(--radius-lg);
+      padding: var(--space-4) var(--space-5);
+    }
+    .sidebar-card h4 {
+      font-size: 0.85rem;
+      font-weight: 700;
+      margin-bottom: var(--space-3);
+      color: var(--text-secondary);
+    }
+    .status-selector {
+      display: flex;
+      gap: var(--space-2);
+      flex-wrap: wrap;
+    }
+    .status-selector .status-option {
+      padding: var(--space-2) var(--space-4);
+      border-radius: var(--radius-full);
+      border: 2px solid var(--line);
+      cursor: pointer;
+      font-size: 0.8rem;
+      font-weight: 600;
+      transition: all var(--transition-fast) ease;
+    }
+    .status-selector .status-option:hover {
+      border-color: var(--gold-300);
+    }
+    .status-selector .status-option.active {
+      border-color: var(--gold-500);
+      background: var(--gold-50);
+      color: var(--gold-500);
+    }
+    .status-selector .status-option.draft { border-color: var(--text-muted); color: var(--text-muted); }
+    .status-selector .status-option.review { border-color: var(--gold-500); color: var(--gold-500); }
+    .status-selector .status-option.approved { border-color: var(--green-500); color: var(--green-500); }
+    .status-selector .status-option.published { border-color: var(--blue-500); color: var(--blue-500); }
+    .editor-actions {
+      display: flex;
+      gap: var(--space-3);
+      margin-top: var(--space-4);
+    }
+    .editor-actions .btn {
+      flex: 1;
+      justify-content: center;
+    }
+    .media-upload-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: var(--space-2);
+      margin-top: var(--space-3);
+    }
+    .media-upload-grid .upload-btn {
+      padding: var(--space-3);
+      border: 2px dashed var(--line);
+      border-radius: var(--radius-sm);
+      text-align: center;
+      cursor: pointer;
+      transition: all var(--transition-fast) ease;
+      background: var(--bg-alt);
+    }
+    .media-upload-grid .upload-btn:hover {
+      border-color: var(--gold-500);
+      background: var(--gold-50);
+    }
+    .media-upload-grid .upload-btn i {
+      font-size: 1.5rem;
+      color: var(--text-muted);
+      display: block;
+      margin-bottom: var(--space-1);
+    }
+    @media (max-width: 1024px) {
+      .editor-layout {
+        grid-template-columns: 1fr;
+        padding: var(--space-4);
+      }
+    }
+    @media (max-width: 640px) {
+      .editor-layout {
+        padding: var(--space-3);
+      }
+      .editor-main {
+        padding: var(--space-4);
+      }
+      .editor-toolbar {
+        gap: var(--space-1);
+      }
+      .editor-toolbar button {
+        font-size: 0.75rem;
+        padding: var(--space-1) var(--space-2);
+      }
+      .media-upload-grid {
+        grid-template-columns: 1fr;
+      }
+      .editor-actions {
+        flex-direction: column;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Skip Link -->
+  <a class="skip-link" href="#main">Skip to main content</a>
+  <div class="flag-line" role="presentation"></div>
+
+  <!-- Top Bar -->
+  <div class="topbar">
+    <div class="wrap">
+      <div class="topbar-links">
+        <span>Republic of South Africa</span>
+        <span class="hide-sm">Content Editor</span>
+      </div>
+      <div class="topbar-links">
+        <span class="lang-pill">Editor</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Header -->
+  <header class="header" role="banner">
+    <div class="wrap">
+      <a class="brand" href="index.html" aria-label="The Presidency, Republic of South Africa - Home">
+        <img class="crest" src="https://www.thepresidency.gov.za/sites/default/files/code-of-arms/Coat%20of%20Arms_complete.jpg" alt="South African Coat of Arms" width="44" height="44">
+        <div class="brand-text">
+          <strong>The Presidency</strong>
+          <span>Content Editor</span>
+        </div>
+      </a>
+      <div class="header-actions">
+        <a href="dashboard.html" class="btn btn-sm btn-outline" style="border-color:rgba(255,255,255,0.2);color:var(--text-primary);">
+          <i class="fas fa-arrow-left"></i> Back to Dashboard
+        </a>
+      </div>
+    </div>
+  </header>
+
+  <!-- Editor Layout -->
+  <div class="editor-layout">
+
+    <!-- Main Editor -->
+    <div class="editor-main">
+      <div class="editor-field">
+        <label>Title <span style="color:var(--red-500);">*</span></label>
+        <input type="text" id="pageTitle" placeholder="Enter page title..." value="SADC Chairperson extends condolences">
+      </div>
+
+      <div class="editor-field">
+        <label>Slug / URL</label>
+        <input type="text" id="pageSlug" placeholder="Enter URL slug..." value="sadc-condolences">
+      </div>
+
+      <!-- Editor Toolbar -->
+      <div class="editor-toolbar">
+        <button title="Bold"><i class="fas fa-bold"></i></button>
+        <button title="Italic"><i class="fas fa-italic"></i></button>
+        <button title="Underline"><i class="fas fa-underline"></i></button>
+        <span class="separator"></span>
+        <button title="Heading"><i class="fas fa-heading"></i></button>
+        <button title="Quote"><i class="fas fa-quote-right"></i></button>
+        <button title="List"><i class="fas fa-list"></i></button>
+        <button title="Numbered List"><i class="fas fa-list-ol"></i></button>
+        <span class="separator"></span>
+        <button title="Link"><i class="fas fa-link"></i></button>
+        <button title="Image"><i class="fas fa-image"></i></button>
+        <button title="Video"><i class="fas fa-video"></i></button>
+        <span class="separator"></span>
+        <button title="Undo"><i class="fas fa-undo"></i></button>
+        <button title="Redo"><i class="fas fa-redo"></i></button>
+        <span class="separator"></span>
+        <button title="HTML"><i class="fas fa-code"></i></button>
+        <button title="Preview"><i class="fas fa-eye"></i></button>
+        <span style="margin-left:auto;font-size:0.75rem;color:var(--text-muted);">Word count: 342</span>
+      </div>
+
+      <div class="editor-field">
+        <label>Content <span style="color:var(--red-500);">*</span></label>
+        <textarea id="pageContent" placeholder="Write your content here...">
+President Cyril Ramaphosa, in his capacity as Chairperson of the Southern African Development Community (SADC), has extended condolences to President Hassan of Tanzania following the passing of a senior government official.
+
+"The SADC family stands in solidarity with the people of Tanzania during this difficult time," President Ramaphosa said in a statement released by The Presidency.
+
+The President further expressed confidence in the resilience of the Tanzanian people and government in navigating this period of mourning.
+        </textarea>
+      </div>
+
+      <!-- Excerpt -->
+      <div class="editor-field">
+        <label>Excerpt / Summary</label>
+        <textarea id="pageExcerpt" rows="3" placeholder="Brief summary of the content...">President Ramaphosa extends condolences to President Hassan of Tanzania on behalf of the SADC community.</textarea>
+      </div>
+    </div>
+
+    <!-- Sidebar -->
+    <div class="editor-sidebar">
+
+      <!-- Status -->
+      <div class="sidebar-card">
+        <h4><i class="fas fa-flag"></i> Status</h4>
+        <div class="status-selector">
+          <span class="status-option draft">Draft</span>
+          <span class="status-option review active">Review</span>
+          <span class="status-option approved">Approved</span>
+          <span class="status-option published">Published</span>
+        </div>
+      </div>
+
+      <!-- Publishing -->
+      <div class="sidebar-card">
+        <h4><i class="fas fa-calendar"></i> Publishing</h4>
+        <div class="editor-field" style="margin-bottom:var(--space-3);">
+          <label>Publish Date</label>
+          <input type="datetime-local" value="2026-09-10T10:00">
+        </div>
+        <div class="editor-field" style="margin-bottom:0;">
+          <label>Author</label>
+          <select>
+            <option>Admin User</option>
+            <option>Jane Doe</option>
+            <option>John Smith</option>
+          </select>
+        </div>
+      </div>
+
+      <!-- Categories -->
+      <div class="sidebar-card">
+        <h4><i class="fas fa-tags"></i> Categories</h4>
+        <div class="editor-field" style="margin-bottom:var(--space-2);">
+          <select>
+            <option>Statements</option>
+            <option>Speeches</option>
+            <option selected>Advisories</option>
+            <option>Media</option>
+          </select>
+        </div>
+        <div class="editor-field" style="margin-bottom:0;">
+          <select>
+            <option>President</option>
+            <option>Deputy President</option>
+            <option selected>Cabinet</option>
+          </select>
+        </div>
+      </div>
+
+      <!-- Media Upload -->
+      <div class="sidebar-card">
+        <h4><i class="fas fa-upload"></i> Media</h4>
+        <div class="media-upload-grid">
+          <div class="upload-btn" onclick="document.getElementById('imageUpload').click()">
+            <i class="fas fa-image"></i>
+            <span>Image</span>
+          </div>
+          <div class="upload-btn" onclick="document.getElementById('videoUpload').click()">
+            <i class="fas fa-video"></i>
+            <span>Video</span>
+          </div>
+          <div class="upload-btn" onclick="document.getElementById('pdfUpload').click()">
+            <i class="fas fa-file-pdf"></i>
+            <span>PDF</span>
+          </div>
+          <div class="upload-btn" onclick="document.getElementById('docUpload').click()">
+            <i class="fas fa-file-alt"></i>
+            <span>Document</span>
+          </div>
+        </div>
+        <input type="file" id="imageUpload" style="display:none;" accept="image/*" multiple>
+        <input type="file" id="videoUpload" style="display:none;" accept="video/*" multiple>
+        <input type="file" id="pdfUpload" style="display:none;" accept=".pdf" multiple>
+        <input type="file" id="docUpload" style="display:none;" accept=".doc,.docx" multiple>
+        <div style="margin-top:var(--space-3);font-size:0.75rem;color:var(--text-muted);">
+          Supported: Images, Video, PDF, Documents
+        </div>
+      </div>
+
+      <!-- Actions -->
+      <div class="editor-actions">
+        <button class="btn btn-outline" onclick="showToast('💾 Draft saved', 'success')">
+          <i class="fas fa-save"></i> Save Draft
+        </button>
+        <button class="btn btn-primary" onclick="showToast('📤 Submitted for review', 'success')">
+          <i class="fas fa-paper-plane"></i> Submit Review
+        </button>
+      </div>
+      <div class="editor-actions" style="margin-top:var(--space-2);">
+        <button class="btn btn-primary" style="background:var(--green-500);border-color:var(--green-500);" onclick="showToast('✅ Published successfully', 'success')">
+          <i class="fas fa-check"></i> Publish
+        </button>
+        <button class="btn btn-ghost" style="border-color:var(--red-500);color:var(--red-500);" onclick="if(confirm('Delete this content?')) showToast('🗑️ Content deleted', 'info')">
+          <i class="fas fa-trash"></i> Delete
+        </button>
+      </div>
+
+      <!-- Revision History -->
+      <div class="sidebar-card">
+        <h4><i class="fas fa-history"></i> Revision History</h4>
+        <div style="font-size:0.82rem;">
+          <div style="display:flex;justify-content:space-between;padding:var(--space-2) 0;border-bottom:1px solid var(--line);">
+            <span>v3 - Admin User</span>
+            <span style="color:var(--text-muted);">10:30</span>
+          </div>
+          <div style="display:flex;justify-content:space-between;padding:var(--space-2) 0;border-bottom:1px solid var(--line);">
+            <span>v2 - Jane Doe</span>
+            <span style="color:var(--text-muted);">09:15</span>
+          </div>
+          <div style="display:flex;justify-content:space-between;padding:var(--space-2) 0;">
+            <span>v1 - John Smith</span>
+            <span style="color:var(--text-muted);">Yesterday</span>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- Toast -->
+  <div class="toast" role="status" aria-live="polite"></div>
+
+  <!-- Scripts -->
+  <script src="data.js"></script>
+  <script src="script.js"></script>
+
+</body>
+</html>

@@ -1,0 +1,283 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#006b4f">
+  <title>Backup & Restore | The Presidency</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,400;14..32,500;14..32,600;14..32,700;14..32,800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+  <link rel="stylesheet" href="styles.css">
+  <style>
+    .backup-container {
+      max-width: 1400px;
+      margin: 0 auto;
+      padding: var(--space-6) var(--space-7);
+    }
+    .backup-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: var(--space-6);
+    }
+    .backup-header h1 { font-size: 1.8rem; font-weight: 700; }
+    .backup-header p { color: var(--text-muted); margin-top: var(--space-1); }
+    .backup-actions {
+      display: flex;
+      gap: var(--space-3);
+      flex-wrap: wrap;
+      margin-bottom: var(--space-6);
+    }
+    .backup-actions .btn { padding: var(--space-3) var(--space-6); }
+    .backup-stats {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: var(--space-4);
+      margin-bottom: var(--space-6);
+    }
+    .backup-stat {
+      background: var(--bg-surface);
+      border: 1px solid var(--line);
+      border-radius: var(--radius-lg);
+      padding: var(--space-4) var(--space-5);
+      text-align: center;
+    }
+    .backup-stat .number { font-size: 1.8rem; font-weight: 800; }
+    .backup-stat .label { font-size: 0.82rem; color: var(--text-muted); }
+    .backup-table-wrapper {
+      background: var(--bg-surface);
+      border: 1px solid var(--line);
+      border-radius: var(--radius-lg);
+      padding: var(--space-4);
+      overflow-x: auto;
+    }
+    .backup-table { width: 100%; border-collapse: collapse; font-size: 0.9rem; }
+    .backup-table th { text-align: left; padding: var(--space-3) var(--space-4); background: var(--bg-alt); font-weight: 600; }
+    .backup-table td { padding: var(--space-3) var(--space-4); border-bottom: 1px solid var(--line); }
+    .backup-table tr:hover td { background: var(--bg-alt); }
+    .backup-status { padding: var(--space-1) var(--space-3); border-radius: var(--radius-full); font-size: 0.7rem; font-weight: 600; }
+    .backup-status.completed { background: var(--green-50); color: var(--green-500); }
+    .backup-status.in_progress { background: var(--gold-50); color: var(--gold-500); }
+    .backup-status.failed { background: #fee9e7; color: var(--red-500); }
+    .backup-type { padding: var(--space-1) var(--space-3); border-radius: var(--radius-full); font-size: 0.7rem; font-weight: 600; }
+    .backup-type.full { background: var(--gold-50); color: var(--gold-500); }
+    .backup-type.incremental { background: var(--green-50); color: var(--green-500); }
+    @media (max-width: 1024px) {
+      .backup-container { padding: var(--space-4); }
+      .backup-stats { grid-template-columns: repeat(2, 1fr); }
+    }
+    @media (max-width: 640px) {
+      .backup-container { padding: var(--space-3); }
+      .backup-header { flex-direction: column; align-items: flex-start; gap: var(--space-3); }
+      .backup-stats { grid-template-columns: 1fr; }
+      .backup-actions { flex-direction: column; }
+      .backup-actions .btn { width: 100%; justify-content: center; }
+    }
+  </style>
+</head>
+<body>
+
+  <a class="skip-link" href="#main">Skip to main content</a>
+  <div class="flag-line" role="presentation"></div>
+
+  <div class="topbar">
+    <div class="wrap">
+      <div class="topbar-links">
+        <span>Republic of South Africa</span>
+        <span class="hide-sm">Backup & Restore</span>
+      </div>
+      <div class="topbar-links">
+        <span class="lang-pill">Admin</span>
+      </div>
+    </div>
+  </div>
+
+  <header class="header" role="banner">
+    <div class="wrap">
+      <a class="brand" href="dashboard.html" aria-label="The Presidency - Dashboard">
+        <img class="crest" src="https://www.thepresidency.gov.za/sites/default/files/code-of-arms/Coat%20of%20Arms_complete.jpg" alt="Coat of Arms" width="44" height="44">
+        <div class="brand-text">
+          <strong>The Presidency</strong>
+          <span>Backup & Restore</span>
+        </div>
+      </a>
+      <div class="header-actions">
+        <a href="dashboard.html" class="btn btn-sm btn-outline" style="border-color:rgba(255,255,255,0.2);color:var(--text-primary);">
+          <i class="fas fa-arrow-left"></i> Dashboard
+        </a>
+      </div>
+    </div>
+  </header>
+
+  <main class="backup-container">
+    <div class="backup-header">
+      <div>
+        <h1><i class="fas fa-database" style="color:var(--gold-500);"></i> Backup &amp; Restore</h1>
+        <p>Manage system backups and restore points</p>
+      </div>
+      <button class="btn btn-gold btn-lg" onclick="createBackup()">
+        <i class="fas fa-upload"></i> Backup Now
+      </button>
+    </div>
+
+    <div class="backup-actions">
+      <button class="btn btn-primary" onclick="createBackup()"><i class="fas fa-play"></i> Run Full Backup</button>
+      <button class="btn btn-outline" onclick="createBackup()"><i class="fas fa-plus"></i> Run Incremental Backup</button>
+      <button class="btn btn-outline" onclick="showToast('📥 Backup downloaded successfully', 'success')"><i class="fas fa-download"></i> Download Latest Backup</button>
+      <button class="btn btn-outline" style="color:var(--gold-500);border-color:var(--gold-500);" onclick="showToast('⚙️ Backup settings opened', 'info')"><i class="fas fa-cog"></i> Configure Schedule</button>
+    </div>
+
+    <div class="backup-stats">
+      <div class="backup-stat">
+        <div class="number" style="color:var(--green-500);">24</div>
+        <div class="label">📦 Total Backups</div>
+      </div>
+      <div class="backup-stat">
+        <div class="number" style="color:var(--gold-500);">48.3 GB</div>
+        <div class="label">💾 Total Storage</div>
+      </div>
+      <div class="backup-stat">
+        <div class="number" style="color:var(--blue-500);">30 days</div>
+        <div class="label">⏳ Retention Period</div>
+      </div>
+      <div class="backup-stat">
+        <div class="number" style="color:var(--gold-500);">Daily</div>
+        <div class="label">📅 Backup Schedule</div>
+      </div>
+    </div>
+
+    <div class="backup-table-wrapper">
+      <h3 style="margin-bottom:var(--space-4);font-weight:700;"><i class="fas fa-history" style="color:var(--gold-500);"></i> Backup History</h3>
+      <table class="backup-table">
+        <thead>
+          <tr>
+            <th>Date &amp; Time</th>
+            <th>Size</th>
+            <th>Type</th>
+            <th>Status</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>10 Sep 2026 03:00</td>
+            <td>12.3 GB</td>
+            <td><span class="backup-type full">Full</span></td>
+            <td><span class="backup-status completed">✅ Completed</span></td>
+            <td>
+              <button class="icon-btn-sm" onclick="showToast('📥 Downloading...', 'info')" title="Download"><i class="fas fa-download"></i></button>
+              <button class="icon-btn-sm" onclick="restoreBackup()" title="Restore"><i class="fas fa-undo"></i></button>
+              <button class="icon-btn-sm" onclick="if(confirm('Delete this backup?')) showToast('🗑️ Deleted', 'info')" title="Delete"><i class="fas fa-trash"></i></button>
+            </td>
+          </tr>
+          <tr>
+            <td>09 Sep 2026 03:00</td>
+            <td>12.1 GB</td>
+            <td><span class="backup-type full">Full</span></td>
+            <td><span class="backup-status completed">✅ Completed</span></td>
+            <td>
+              <button class="icon-btn-sm" onclick="showToast('📥 Downloading...', 'info')" title="Download"><i class="fas fa-download"></i></button>
+              <button class="icon-btn-sm" onclick="restoreBackup()" title="Restore"><i class="fas fa-undo"></i></button>
+              <button class="icon-btn-sm" onclick="if(confirm('Delete this backup?')) showToast('🗑️ Deleted', 'info')" title="Delete"><i class="fas fa-trash"></i></button>
+            </td>
+          </tr>
+          <tr>
+            <td>08 Sep 2026 03:00</td>
+            <td>11.9 GB</td>
+            <td><span class="backup-type full">Full</span></td>
+            <td><span class="backup-status completed">✅ Completed</span></td>
+            <td>
+              <button class="icon-btn-sm" onclick="showToast('📥 Downloading...', 'info')" title="Download"><i class="fas fa-download"></i></button>
+              <button class="icon-btn-sm" onclick="restoreBackup()" title="Restore"><i class="fas fa-undo"></i></button>
+              <button class="icon-btn-sm" onclick="if(confirm('Delete this backup?')) showToast('🗑️ Deleted', 'info')" title="Delete"><i class="fas fa-trash"></i></button>
+            </td>
+          </tr>
+          <tr>
+            <td>07 Sep 2026 12:00</td>
+            <td>2.4 GB</td>
+            <td><span class="backup-type incremental">Incremental</span></td>
+            <td><span class="backup-status completed">✅ Completed</span></td>
+            <td>
+              <button class="icon-btn-sm" onclick="showToast('📥 Downloading...', 'info')" title="Download"><i class="fas fa-download"></i></button>
+              <button class="icon-btn-sm" onclick="restoreBackup()" title="Restore"><i class="fas fa-undo"></i></button>
+              <button class="icon-btn-sm" onclick="if(confirm('Delete this backup?')) showToast('🗑️ Deleted', 'info')" title="Delete"><i class="fas fa-trash"></i></button>
+            </td>
+          </tr>
+          <tr>
+            <td>06 Sep 2026 03:00</td>
+            <td>11.7 GB</td>
+            <td><span class="backup-type full">Full</span></td>
+            <td><span class="backup-status completed">✅ Completed</span></td>
+            <td>
+              <button class="icon-btn-sm" onclick="showToast('📥 Downloading...', 'info')" title="Download"><i class="fas fa-download"></i></button>
+              <button class="icon-btn-sm" onclick="restoreBackup()" title="Restore"><i class="fas fa-undo"></i></button>
+              <button class="icon-btn-sm" onclick="if(confirm('Delete this backup?')) showToast('🗑️ Deleted', 'info')" title="Delete"><i class="fas fa-trash"></i></button>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </main>
+
+  <div class="toast" role="status" aria-live="polite"></div>
+  <script src="data.js"></script>
+  <script src="script.js"></script>
+
+  <script>
+    let backupInProgress = false;
+
+    function createBackup() {
+      if (backupInProgress) {
+        showToast('⏳ Backup already in progress...', 'warning');
+        return;
+      }
+      backupInProgress = true;
+      showToast('⏳ Starting backup...', 'info');
+      
+      // Add a new row to the table
+      const table = document.querySelector('.backup-table tbody');
+      const row = document.createElement('tr');
+      const now = new Date();
+      const dateStr = now.toLocaleDateString('en-GB', { day: '2-digit', month: 'short', year: 'numeric' });
+      const timeStr = now.toLocaleTimeString('en-GB', { hour: '2-digit', minute: '2-digit' });
+      row.innerHTML = `
+        <td>${dateStr} ${timeStr}</td>
+        <td>—</td>
+        <td><span class="backup-type full">Full</span></td>
+        <td><span class="backup-status in_progress">🔄 In Progress</span></td>
+        <td><span style="font-size:0.7rem;color:var(--text-muted);">Processing...</span></td>
+      `;
+      table.insertBefore(row, table.firstChild);
+
+      setTimeout(() => {
+        const size = (10 + Math.random() * 4).toFixed(1);
+        row.innerHTML = `
+          <td>${dateStr} ${timeStr}</td>
+          <td>${size} GB</td>
+          <td><span class="backup-type full">Full</span></td>
+          <td><span class="backup-status completed">✅ Completed</span></td>
+          <td>
+            <button class="icon-btn-sm" onclick="showToast('📥 Downloading...', 'info')" title="Download"><i class="fas fa-download"></i></button>
+            <button class="icon-btn-sm" onclick="restoreBackup()" title="Restore"><i class="fas fa-undo"></i></button>
+            <button class="icon-btn-sm" onclick="if(confirm('Delete this backup?')) showToast('🗑️ Deleted', 'info')" title="Delete"><i class="fas fa-trash"></i></button>
+          </td>
+        `;
+        backupInProgress = false;
+        showToast('✅ Backup completed successfully!', 'success');
+      }, 2000);
+    }
+
+    function restoreBackup() {
+      if (confirm('⚠️ WARNING: This will restore the system to the selected backup point. Continue?')) {
+        showToast('🔄 Restore in progress...', 'info');
+        setTimeout(() => {
+          showToast('✅ System restored successfully!', 'success');
+        }, 3000);
+      }
+    }
+  </script>
+
+</body>
+</html>

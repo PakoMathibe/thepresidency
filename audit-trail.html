@@ -1,0 +1,300 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#006b4f">
+  <title>Audit Trail | The Presidency</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,400;14..32,500;14..32,600;14..32,700;14..32,800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+  <link rel="stylesheet" href="styles.css">
+  <style>
+    .audit-container {
+      max-width: 1400px;
+      margin: 0 auto;
+      padding: var(--space-6) var(--space-7);
+    }
+    .audit-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: var(--space-6);
+    }
+    .audit-header h1 { font-size: 1.8rem; font-weight: 700; }
+    .audit-header p { color: var(--text-muted); margin-top: var(--space-1); }
+    .audit-filters {
+      display: flex;
+      gap: var(--space-3);
+      flex-wrap: wrap;
+      margin-bottom: var(--space-4);
+    }
+    .audit-filters .field {
+      min-width: 180px;
+    }
+    .audit-list {
+      background: var(--bg-surface);
+      border: 1px solid var(--line);
+      border-radius: var(--radius-lg);
+      padding: var(--space-4);
+    }
+    .audit-item {
+      display: flex;
+      align-items: center;
+      gap: var(--space-4);
+      padding: var(--space-3) var(--space-4);
+      border-bottom: 1px solid var(--line);
+      transition: background var(--transition-fast) ease;
+    }
+    .audit-item:last-child { border-bottom: 0; }
+    .audit-item:hover { background: var(--bg-alt); }
+    .audit-icon {
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      display: grid;
+      place-items: center;
+      flex-shrink: 0;
+      font-size: 0.9rem;
+    }
+    .audit-icon.create { background: var(--green-50); color: var(--green-500); }
+    .audit-icon.edit { background: var(--gold-50); color: var(--gold-500); }
+    .audit-icon.delete { background: #fee9e7; color: var(--red-500); }
+    .audit-icon.approve { background: var(--green-50); color: var(--green-500); }
+    .audit-icon.upload { background: var(--blue-50); color: var(--blue-500); }
+    .audit-icon.system { background: var(--bg-alt); color: var(--text-muted); }
+    .audit-content { flex: 1; }
+    .audit-content .action { font-weight: 600; font-size: 0.95rem; }
+    .audit-content .detail { font-size: 0.85rem; color: var(--text-muted); }
+    .audit-content .user { font-size: 0.8rem; color: var(--text-muted); }
+    .audit-time { font-size: 0.78rem; color: var(--text-muted); text-align: right; }
+    @media (max-width: 1024px) {
+      .audit-container { padding: var(--space-4); }
+    }
+    @media (max-width: 640px) {
+      .audit-container { padding: var(--space-3); }
+      .audit-header { flex-direction: column; align-items: flex-start; gap: var(--space-3); }
+      .audit-item { flex-wrap: wrap; gap: var(--space-2); }
+      .audit-time { width: 100%; text-align: left; }
+      .audit-filters { flex-direction: column; }
+      .audit-filters .field { min-width: 100%; }
+    }
+  </style>
+</head>
+<body>
+
+  <a class="skip-link" href="#main">Skip to main content</a>
+  <div class="flag-line" role="presentation"></div>
+
+  <div class="topbar">
+    <div class="wrap">
+      <div class="topbar-links">
+        <span>Republic of South Africa</span>
+        <span class="hide-sm">Audit Trail</span>
+      </div>
+      <div class="topbar-links">
+        <span class="lang-pill">Admin</span>
+      </div>
+    </div>
+  </div>
+
+  <header class="header" role="banner">
+    <div class="wrap">
+      <a class="brand" href="dashboard.html" aria-label="The Presidency - Dashboard">
+        <img class="crest" src="https://www.thepresidency.gov.za/sites/default/files/code-of-arms/Coat%20of%20Arms_complete.jpg" alt="Coat of Arms" width="44" height="44">
+        <div class="brand-text">
+          <strong>The Presidency</strong>
+          <span>Audit Trail</span>
+        </div>
+      </a>
+      <div class="header-actions">
+        <a href="dashboard.html" class="btn btn-sm btn-outline" style="border-color:rgba(255,255,255,0.2);color:var(--text-primary);">
+          <i class="fas fa-arrow-left"></i> Dashboard
+        </a>
+      </div>
+    </div>
+  </header>
+
+  <main class="audit-container">
+    <div class="audit-header">
+      <div>
+        <h1><i class="fas fa-history" style="color:var(--gold-500);"></i> Audit Trail</h1>
+        <p>Complete log of all system actions and user activity</p>
+      </div>
+      <div style="display:flex;gap:var(--space-2);">
+        <button class="btn btn-outline" onclick="showToast('📊 Audit log exported as CSV', 'success')">
+          <i class="fas fa-download"></i> Export CSV
+        </button>
+        <button class="btn btn-outline" onclick="showToast('📄 Audit log exported as PDF', 'success')">
+          <i class="fas fa-file-pdf"></i> Export PDF
+        </button>
+      </div>
+    </div>
+
+    <div class="audit-filters">
+      <input class="field" placeholder="🔍 Search audit log..." oninput="filterAudit(this.value)">
+      <select class="field" onchange="filterAuditType(this.value)">
+        <option value="all">All Actions</option>
+        <option value="create">Create</option>
+        <option value="edit">Edit</option>
+        <option value="delete">Delete</option>
+        <option value="approve">Approve</option>
+        <option value="upload">Upload</option>
+        <option value="system">System</option>
+      </select>
+      <select class="field" onchange="filterAuditUser(this.value)">
+        <option value="all">All Users</option>
+        <option value="Admin User">Admin User</option>
+        <option value="Jane Doe">Jane Doe</option>
+        <option value="John Smith">John Smith</option>
+        <option value="Michael Brown">Michael Brown</option>
+        <option value="System">System</option>
+      </select>
+      <input class="field" type="date" onchange="filterAuditDate(this.value)">
+    </div>
+
+    <div class="audit-list" id="auditList">
+      <div class="audit-item">
+        <div class="audit-icon create"><i class="fas fa-user-plus"></i></div>
+        <div class="audit-content">
+          <div class="action">User created: Jane Doe</div>
+          <div class="detail">New editor account added</div>
+          <div class="user">👤 Admin User</div>
+        </div>
+        <div class="audit-time">10 Sep 2026<br>14:30</div>
+      </div>
+
+      <div class="audit-item">
+        <div class="audit-icon edit"><i class="fas fa-edit"></i></div>
+        <div class="audit-content">
+          <div class="action">Content updated: SADC Statement</div>
+          <div class="detail">Content revised and resubmitted for review</div>
+          <div class="user">👤 Jane Doe</div>
+        </div>
+        <div class="audit-time">10 Sep 2026<br>13:15</div>
+      </div>
+
+      <div class="audit-item">
+        <div class="audit-icon approve"><i class="fas fa-check-circle"></i></div>
+        <div class="audit-content">
+          <div class="action">Content approved: National Orders 2026</div>
+          <div class="detail">Approved by Senior Editor</div>
+          <div class="user">👤 Michael Brown</div>
+        </div>
+        <div class="audit-time">10 Sep 2026<br>11:45</div>
+      </div>
+
+      <div class="audit-item">
+        <div class="audit-icon upload"><i class="fas fa-upload"></i></div>
+        <div class="audit-content">
+          <div class="action">Document uploaded: Annual Report 2026</div>
+          <div class="detail">PDF uploaded to document management</div>
+          <div class="user">👤 Admin User</div>
+        </div>
+        <div class="audit-time">10 Sep 2026<br>10:30</div>
+      </div>
+
+      <div class="audit-item">
+        <div class="audit-icon delete"><i class="fas fa-trash"></i></div>
+        <div class="audit-content">
+          <div class="action">Content archived: Draft speech</div>
+          <div class="detail">Moved to archive by Admin User</div>
+          <div class="user">👤 Admin User</div>
+        </div>
+        <div class="audit-time">09 Sep 2026<br>16:20</div>
+      </div>
+
+      <div class="audit-item">
+        <div class="audit-icon edit"><i class="fas fa-user-edit"></i></div>
+        <div class="audit-content">
+          <div class="action">User role changed: Sarah Johnson</div>
+          <div class="detail">Changed from editor to reviewer</div>
+          <div class="user">👤 Admin User</div>
+        </div>
+        <div class="audit-time">09 Sep 2026<br>14:00</div>
+      </div>
+
+      <div class="audit-item">
+        <div class="audit-icon system"><i class="fas fa-database"></i></div>
+        <div class="audit-content">
+          <div class="action">Backup completed</div>
+          <div class="detail">Full system backup successful</div>
+          <div class="user">🤖 System</div>
+        </div>
+        <div class="audit-time">09 Sep 2026<br>03:00</div>
+      </div>
+
+      <div class="audit-item">
+        <div class="audit-icon system"><i class="fas fa-shield-alt"></i></div>
+        <div class="audit-content">
+          <div class="action">Security scan completed</div>
+          <div class="detail">All systems secure · No vulnerabilities detected</div>
+          <div class="user">🤖 System</div>
+        </div>
+        <div class="audit-time">08 Sep 2026<br>22:00</div>
+      </div>
+
+      <div class="audit-item">
+        <div class="audit-icon create"><i class="fas fa-file-alt"></i></div>
+        <div class="audit-content">
+          <div class="action">New page created: Speeches</div>
+          <div class="detail">Page created and published</div>
+          <div class="user">👤 John Smith</div>
+        </div>
+        <div class="audit-time">08 Sep 2026<br>09:00</div>
+      </div>
+
+      <div class="audit-item">
+        <div class="audit-icon system"><i class="fas fa-sync"></i></div>
+        <div class="audit-content">
+          <div class="action">System maintenance completed</div>
+          <div class="detail">Database optimization and cleanup</div>
+          <div class="user">🤖 System</div>
+        </div>
+        <div class="audit-time">07 Sep 2026<br>02:00</div>
+      </div>
+    </div>
+  </main>
+
+  <div class="toast" role="status" aria-live="polite"></div>
+  <script src="data.js"></script>
+  <script src="script.js"></script>
+
+  <script>
+    function filterAudit(value) {
+      const items = document.querySelectorAll('.audit-item');
+      const search = value.toLowerCase();
+      items.forEach(item => {
+        const text = item.textContent.toLowerCase();
+        item.style.display = text.includes(search) ? 'flex' : 'none';
+      });
+    }
+    function filterAuditType(value) {
+      const items = document.querySelectorAll('.audit-item');
+      items.forEach(item => {
+        const icon = item.querySelector('.audit-icon');
+        if (value === 'all') { item.style.display = 'flex'; return; }
+        const type = icon.className.includes(value) ? 'flex' : 'none';
+        item.style.display = type;
+      });
+    }
+    function filterAuditUser(value) {
+      const items = document.querySelectorAll('.audit-item');
+      items.forEach(item => {
+        const user = item.querySelector('.user')?.textContent || '';
+        if (value === 'all') { item.style.display = 'flex'; return; }
+        item.style.display = user.includes(value) ? 'flex' : 'none';
+      });
+    }
+    function filterAuditDate(value) {
+      const items = document.querySelectorAll('.audit-item');
+      items.forEach(item => {
+        const time = item.querySelector('.audit-time')?.textContent || '';
+        item.style.display = time.includes(value) ? 'flex' : 'none';
+      });
+    }
+  </script>
+
+</body>
+</html>

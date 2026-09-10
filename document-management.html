@@ -1,0 +1,281 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#006b4f">
+  <title>Document Management | The Presidency</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,400;14..32,500;14..32,600;14..32,700;14..32,800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+  <link rel="stylesheet" href="styles.css">
+  <style>
+    .doc-container {
+      max-width: 1400px;
+      margin: 0 auto;
+      padding: var(--space-6) var(--space-7);
+    }
+    .doc-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: var(--space-6);
+    }
+    .doc-header h1 { font-size: 1.8rem; font-weight: 700; }
+    .doc-header p { color: var(--text-muted); margin-top: var(--space-1); }
+    .doc-stats {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: var(--space-4);
+      margin-bottom: var(--space-6);
+    }
+    .doc-stat {
+      background: var(--bg-surface);
+      border: 1px solid var(--line);
+      border-radius: var(--radius-lg);
+      padding: var(--space-4) var(--space-5);
+      text-align: center;
+    }
+    .doc-stat .number { font-size: 1.8rem; font-weight: 800; }
+    .doc-stat .label { font-size: 0.82rem; color: var(--text-muted); }
+    .doc-toolbar {
+      display: flex;
+      gap: var(--space-3);
+      flex-wrap: wrap;
+      margin-bottom: var(--space-4);
+    }
+    .doc-toolbar .field { min-width: 200px; flex: 1; }
+    .doc-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+      gap: var(--space-4);
+    }
+    .doc-card {
+      background: var(--bg-surface);
+      border: 1px solid var(--line);
+      border-radius: var(--radius-lg);
+      padding: var(--space-4);
+      transition: all var(--transition-fast) ease;
+    }
+    .doc-card:hover { border-color: var(--gold-300); transform: translateY(-4px); box-shadow: var(--shadow-md); }
+    .doc-card .doc-preview {
+      height: 140px;
+      background: var(--bg-alt);
+      border-radius: var(--radius-sm);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 3rem;
+      margin-bottom: var(--space-3);
+    }
+    .doc-card .doc-preview.pdf { background: #fee9e7; color: var(--red-500); }
+    .doc-card .doc-preview.word { background: #e8f0fe; color: #1a73e8; }
+    .doc-card .doc-preview.pptx { background: #fef3e7; color: #e37400; }
+    .doc-card .doc-preview.excel { background: #e7f4ea; color: #1e8e3e; }
+    .doc-card .doc-preview.image { background: #f3e8ff; color: #9334e6; }
+    .doc-card .doc-preview.video { background: #fce4ec; color: #d81b60; }
+    .doc-card .doc-name { font-weight: 600; font-size: 0.95rem; }
+    .doc-card .doc-meta { font-size: 0.78rem; color: var(--text-muted); margin-top: var(--space-1); }
+    .doc-card .doc-actions { margin-top: var(--space-3); display: flex; gap: var(--space-2); }
+    @media (max-width: 1024px) {
+      .doc-container { padding: var(--space-4); }
+      .doc-stats { grid-template-columns: repeat(2, 1fr); }
+    }
+    @media (max-width: 640px) {
+      .doc-container { padding: var(--space-3); }
+      .doc-stats { grid-template-columns: 1fr; }
+      .doc-header { flex-direction: column; align-items: flex-start; gap: var(--space-3); }
+      .doc-toolbar { flex-direction: column; }
+      .doc-toolbar .field { min-width: 100%; }
+    }
+  </style>
+</head>
+<body>
+
+  <a class="skip-link" href="#main">Skip to main content</a>
+  <div class="flag-line" role="presentation"></div>
+
+  <div class="topbar">
+    <div class="wrap">
+      <div class="topbar-links">
+        <span>Republic of South Africa</span>
+        <span class="hide-sm">Document Management</span>
+      </div>
+      <div class="topbar-links">
+        <span class="lang-pill">Admin</span>
+      </div>
+    </div>
+  </div>
+
+  <header class="header" role="banner">
+    <div class="wrap">
+      <a class="brand" href="dashboard.html" aria-label="The Presidency - Dashboard">
+        <img class="crest" src="https://www.thepresidency.gov.za/sites/default/files/code-of-arms/Coat%20of%20Arms_complete.jpg" alt="Coat of Arms" width="44" height="44">
+        <div class="brand-text">
+          <strong>The Presidency</strong>
+          <span>Document Management</span>
+        </div>
+      </a>
+      <div class="header-actions">
+        <a href="dashboard.html" class="btn btn-sm btn-outline" style="border-color:rgba(255,255,255,0.2);color:var(--text-primary);">
+          <i class="fas fa-arrow-left"></i> Dashboard
+        </a>
+      </div>
+    </div>
+  </header>
+
+  <main class="doc-container">
+    <div class="doc-header">
+      <div>
+        <h1><i class="fas fa-folder-open" style="color:var(--gold-500);"></i> Document Management</h1>
+        <p>Upload, organize, and manage all documents</p>
+      </div>
+      <button class="btn btn-gold btn-lg" onclick="document.getElementById('fileUpload').click()">
+        <i class="fas fa-upload"></i> Upload Document
+      </button>
+      <input type="file" id="fileUpload" style="display:none;" multiple accept=".pdf,.doc,.docx,.pptx,.xls,.xlsx,.jpg,.png,.mp4" onchange="showToast('📤 Documents uploaded successfully', 'success')">
+    </div>
+
+    <div class="doc-stats">
+      <div class="doc-stat">
+        <div class="number" style="color:var(--green-500);">47</div>
+        <div class="label">📄 Total Documents</div>
+      </div>
+      <div class="doc-stat">
+        <div class="number" style="color:var(--gold-500);">12</div>
+        <div class="label">📁 Categories</div>
+      </div>
+      <div class="doc-stat">
+        <div class="number" style="color:var(--blue-500);">8.4 GB</div>
+        <div class="label">💾 Total Storage</div>
+      </div>
+      <div class="doc-stat">
+        <div class="number" style="color:var(--gold-500);">5</div>
+        <div class="label">📤 Recent Uploads</div>
+      </div>
+    </div>
+
+    <div class="doc-toolbar">
+      <input class="field" placeholder="🔍 Search documents..." oninput="filterDocs(this.value)">
+      <select class="field" onchange="filterDocType(this.value)">
+        <option value="all">All Types</option>
+        <option value="pdf">PDF</option>
+        <option value="word">Word</option>
+        <option value="pptx">PowerPoint</option>
+        <option value="excel">Excel</option>
+        <option value="image">Images</option>
+        <option value="video">Videos</option>
+      </select>
+      <select class="field" onchange="filterDocCategory(this.value)">
+        <option value="all">All Categories</option>
+        <option value="reports">Reports</option>
+        <option value="strategic">Strategic</option>
+        <option value="presentations">Presentations</option>
+        <option value="data">Data</option>
+        <option value="uploads">Uploads</option>
+      </select>
+    </div>
+
+    <div class="doc-grid" id="docGrid">
+      <div class="doc-card">
+        <div class="doc-preview pdf"><i class="fas fa-file-pdf"></i></div>
+        <div class="doc-name">Annual Report 2026</div>
+        <div class="doc-meta">PDF · 2.4 MB · Reports · Uploaded 10 Sep 2026</div>
+        <div class="doc-actions">
+          <button class="btn btn-sm btn-primary" onclick="showToast('📥 Downloading...', 'info')">Download</button>
+          <button class="btn btn-sm btn-outline" onclick="showToast('✏️ Edit document', 'info')">Edit</button>
+          <button class="btn btn-sm btn-outline" style="color:var(--red-500);border-color:var(--red-500);" onclick="if(confirm('Delete?')) showToast('🗑️ Deleted', 'info')">Delete</button>
+        </div>
+      </div>
+
+      <div class="doc-card">
+        <div class="doc-preview word"><i class="fas fa-file-word"></i></div>
+        <div class="doc-name">Strategic Plan 2025-2030</div>
+        <div class="doc-meta">Word · 1.8 MB · Strategic · Uploaded 08 Sep 2026</div>
+        <div class="doc-actions">
+          <button class="btn btn-sm btn-primary" onclick="showToast('📥 Downloading...', 'info')">Download</button>
+          <button class="btn btn-sm btn-outline" onclick="showToast('✏️ Edit document', 'info')">Edit</button>
+          <button class="btn btn-sm btn-outline" style="color:var(--red-500);border-color:var(--red-500);" onclick="if(confirm('Delete?')) showToast('🗑️ Deleted', 'info')">Delete</button>
+        </div>
+      </div>
+
+      <div class="doc-card">
+        <div class="doc-preview pptx"><i class="fas fa-file-powerpoint"></i></div>
+        <div class="doc-name">SONA 2026 Presentation</div>
+        <div class="doc-meta">PowerPoint · 8.2 MB · Presentations · Uploaded 05 Sep 2026</div>
+        <div class="doc-actions">
+          <button class="btn btn-sm btn-primary" onclick="showToast('📥 Downloading...', 'info')">Download</button>
+          <button class="btn btn-sm btn-outline" onclick="showToast('✏️ Edit document', 'info')">Edit</button>
+          <button class="btn btn-sm btn-outline" style="color:var(--red-500);border-color:var(--red-500);" onclick="if(confirm('Delete?')) showToast('🗑️ Deleted', 'info')">Delete</button>
+        </div>
+      </div>
+
+      <div class="doc-card">
+        <div class="doc-preview excel"><i class="fas fa-file-excel"></i></div>
+        <div class="doc-name">Performance Data Q3 2026</div>
+        <div class="doc-meta">Excel · 1.2 MB · Data · Uploaded 03 Sep 2026</div>
+        <div class="doc-actions">
+          <button class="btn btn-sm btn-primary" onclick="showToast('📥 Downloading...', 'info')">Download</button>
+          <button class="btn btn-sm btn-outline" onclick="showToast('✏️ Edit document', 'info')">Edit</button>
+          <button class="btn btn-sm btn-outline" style="color:var(--red-500);border-color:var(--red-500);" onclick="if(confirm('Delete?')) showToast('🗑️ Deleted', 'info')">Delete</button>
+        </div>
+      </div>
+
+      <div class="doc-card">
+        <div class="doc-preview pdf"><i class="fas fa-file-pdf"></i></div>
+        <div class="doc-name">Budget Report 2026</div>
+        <div class="doc-meta">PDF · 3.1 MB · Reports · Uploaded 01 Sep 2026</div>
+        <div class="doc-actions">
+          <button class="btn btn-sm btn-primary" onclick="showToast('📥 Downloading...', 'info')">Download</button>
+          <button class="btn btn-sm btn-outline" onclick="showToast('✏️ Edit document', 'info')">Edit</button>
+          <button class="btn btn-sm btn-outline" style="color:var(--red-500);border-color:var(--red-500);" onclick="if(confirm('Delete?')) showToast('🗑️ Deleted', 'info')">Delete</button>
+        </div>
+      </div>
+
+      <div class="doc-card">
+        <div class="doc-preview image"><i class="fas fa-image"></i></div>
+        <div class="doc-name">Presidential Photos - SONA 2026</div>
+        <div class="doc-meta">Image · 12.5 MB · Uploads · Uploaded 10 Sep 2026</div>
+        <div class="doc-actions">
+          <button class="btn btn-sm btn-primary" onclick="showToast('📥 Downloading...', 'info')">Download</button>
+          <button class="btn btn-sm btn-outline" onclick="showToast('✏️ Edit document', 'info')">Edit</button>
+          <button class="btn btn-sm btn-outline" style="color:var(--red-500);border-color:var(--red-500);" onclick="if(confirm('Delete?')) showToast('🗑️ Deleted', 'info')">Delete</button>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <div class="toast" role="status" aria-live="polite"></div>
+  <script src="data.js"></script>
+  <script src="script.js"></script>
+
+  <script>
+    function filterDocs(value) {
+      const cards = document.querySelectorAll('.doc-card');
+      const search = value.toLowerCase();
+      cards.forEach(card => {
+        const text = card.textContent.toLowerCase();
+        card.style.display = text.includes(search) ? 'block' : 'none';
+      });
+    }
+    function filterDocType(value) {
+      const cards = document.querySelectorAll('.doc-card');
+      cards.forEach(card => {
+        const preview = card.querySelector('.doc-preview');
+        if (value === 'all') { card.style.display = 'block'; return; }
+        card.style.display = preview.className.includes(value) ? 'block' : 'none';
+      });
+    }
+    function filterDocCategory(value) {
+      const cards = document.querySelectorAll('.doc-card');
+      cards.forEach(card => {
+        const meta = card.querySelector('.doc-meta')?.textContent || '';
+        if (value === 'all') { card.style.display = 'block'; return; }
+        card.style.display = meta.toLowerCase().includes(value) ? 'block' : 'none';
+      });
+    }
+  </script>
+
+</body>
+</html>
