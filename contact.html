@@ -67,10 +67,6 @@
         </div>
         <a href="administration.html">Seventh Administration</a>
         <a href="procurement.html">Procurement</a>
-        <!-- CHAT IN NAV -->
-        <button class="nav-chat-btn" id="navChatToggle" aria-label="Open chat assistant">
-          <i class="fas fa-comment-dots"></i> Chat
-        </button>
       </nav>
 
       <div class="header-actions">
@@ -88,8 +84,6 @@
     <a href="administration.html">Seventh Administration</a>
     <a href="procurement.html">Procurement</a>
     <a href="contact.html">Contact us</a>
-    <!-- CHAT IN MOBILE MENU -->
-    <button class="mobile-chat-btn" id="mobileChatToggle"><i class="fas fa-comment-dots"></i> Chat with us</button>
   </nav>
 
   <main id="main" role="main">
@@ -545,14 +539,46 @@
   <!-- Toast -->
   <div class="toast" role="status" aria-live="polite"></div>
 
-  <!-- SCROLL TO TOP BUTTON -->
+  <!-- CHATBOT (Bottom-right, stacked with scroll) -->
+  <div class="chatbot-container">
+    <button class="chat-toggle" id="chatToggle" aria-label="Open chat assistant">
+      <span class="chat-icon"><i class="fas fa-comment-dots"></i></span>
+      <span class="badge">1</span>
+    </button>
+    <div class="chat-window" id="chatWindow">
+      <div class="chat-header">
+        <span><i class="fas fa-comment-dots"></i> Ask the Presidency Assistant</span>
+        <button class="chat-close" id="chatClose"><i class="fas fa-times"></i></button>
+      </div>
+      <div class="chat-messages" id="chatMessages">
+        <div class="message bot">
+          <div class="bubble">👋 Hello! I'm the Presidency assistant. How can I help you today?</div>
+        </div>
+      </div>
+      <div class="chat-input-area">
+        <input type="text" id="chatInput" placeholder="Type your question..." aria-label="Chat input">
+        <button id="chatSend" aria-label="Send message"><i class="fas fa-paper-plane"></i></button>
+      </div>
+      <div class="chat-suggestions">
+        <button class="suggestion">What are the national priorities?</button>
+        <button class="suggestion">Tell me about the President</button>
+        <button class="suggestion">How do I contact the Presidency?</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- SCROLL TO TOP BUTTON (Sits ABOVE chat) -->
   <button class="scroll-top" id="scrollTopBtn" aria-label="Scroll to top">
     <i class="fas fa-arrow-up"></i>
   </button>
 
   <!-- ======================================== -->
-  <!-- SCRIPTS -->
+  <!-- SCRIPTS — Modular, feature-packed        -->
   <!-- ======================================== -->
+  <script src="data.js"></script>
+  <script src="search.js"></script>
+  <script src="accessibility.js"></script>
+  <script src="chat.js"></script>
   <script src="script.js"></script>
   <script src="contact.js"></script>
 
